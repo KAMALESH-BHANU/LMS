@@ -5,6 +5,7 @@ import LandingPage from "./pages/LandingPAge";
 import Login from "./pages/Login";  
 import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
+import Profile from "./pages/Profile";
 const App = () => {
   return (
     <Router>
@@ -16,6 +17,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/profile" element={<Profile />} /> 
           </Routes>
         </main>
       </div>

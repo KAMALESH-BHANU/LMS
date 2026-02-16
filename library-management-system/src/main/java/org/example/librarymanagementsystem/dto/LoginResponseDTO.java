@@ -15,9 +15,10 @@ public class LoginResponseDTO {
         this.token = token;
     }
 
-    public LoginResponseDTO(String role, String token) {
-        this.role = role;
+    public LoginResponseDTO(String token, String role) {
+
         this.token = token;
+        this.role=role;
     }
 }
 

@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Check if email already exists
     boolean existsByEmail(String email);
     @Query("SELECT a FROM User a WHERE a.approvalStatus = :status")
-    public List<User> findByApprovalStatues(@Param("status") String status);
+    public List<User> findByApprovalStatus(@Param("status") String status);
 
 
 }

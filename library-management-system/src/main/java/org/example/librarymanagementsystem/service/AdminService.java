@@ -1,5 +1,6 @@
 package org.example.librarymanagementsystem.service;
 
+import org.example.librarymanagementsystem.dto.AdminUserApprovalDTO;
 import org.example.librarymanagementsystem.model.ApprovalStatus;
 import org.example.librarymanagementsystem.model.User;
 import org.example.librarymanagementsystem.repository.BookRepository;
@@ -8,6 +9,7 @@ import org.example.librarymanagementsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -41,15 +43,24 @@ public class AdminService {
 //                overdueBooks
 //        );
 //    }
-//
-    public List<User> getPendingUsers() {
-        return userRepository.findByApprovalStatues("PENDING");
+
+    public List<AdminUserApprovalDTO> getPendingUsers() {
+
+            return userRepository.findByApprovalStatus("PENDING")
+                    .stream()
+                    .map(user -> new AdminUserApprovalDTO(
+                         user.getId(),
+                         user.getFirstName(), user.getLastName(),
+                         user.getEmail(),
+                         user.getApprovalStatus()
+                    ))
+                    .toList();
     }
     public String approveUser(Long userId){
         User u= userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Pending user not found"));
         u.setApprovedBy("ADMIN");
         u.setApprovedDate(LocalDateTime.now());
-        u.setApprovalStatus("ACCEPTED");
+        u.setApprovalStatus("APPROVED");
         String rawPassword = generateRandomPassword();
         u.setPassword(passwordEncoder.encode(rawPassword));
         emailService.sendApprovalEmail(u.getEmail(), rawPassword);

@@ -1,5 +1,6 @@
 package org.example.librarymanagementsystem.controller;
 
+import org.example.librarymanagementsystem.dto.AdminUserApprovalDTO;
 import org.example.librarymanagementsystem.model.ApprovalStatus;
 import org.example.librarymanagementsystem.model.User;
 import org.example.librarymanagementsystem.repository.UserRepository;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-//@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
     @Autowired
     private  AdminService adminService;
@@ -37,7 +38,7 @@ public class AdminController {
 //    }
 
     @GetMapping("/pending-users")
-    public List<User> getPendingUsers() {
+    public List<AdminUserApprovalDTO> getPendingUsers() {
         return adminService.getPendingUsers();
     }
 
