@@ -1,15 +1,19 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+import API from "../services/api";
 
 function ChangePassword() {
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     oldPassword: "",
     newPassword: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -17,29 +21,56 @@ function ChangePassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setMessage("");
 
     if (form.newPassword !== form.confirmPassword) {
-      setMessage("New passwords do not match");
+      setError("New passwords do not match");
       return;
     }
 
     try {
-      const res = await axios.post(
-        "http://localhost:8080/api/users/change-password",
-        form
+    const res = await API.put("/api/auth/change-password", 
+        {
+          oldPassword: form.oldPassword,
+          newPassword: form.newPassword,
+        }
       );
+      
       setMessage(res.data);
+
+      // ✅ Mark first login completed
+      localStorage.setItem("firstLogin", "false");
+
+      const role = localStorage.getItem("role");
+
+      // ✅ Redirect after 1.5 seconds
+      setTimeout(() => {
+        if (role === "STUDENT") {
+          navigate("/student/dashboard");
+        } else if (role === "LIBRARIAN") {
+          navigate("/librarian/dashboard");
+        } else if (role === "ADMIN") {
+          navigate("/admin/dashboard");
+        }
+      }, 1500);
+
     } catch (err) {
-      setMessage(err.response?.data || "Error updating password");
+      console.log(err);
+      setError(err.response?.data || "Error updating password");
     }
   };
 
   return (
-    <div style={containerStyle}>
-      <div style={cardStyle}>
-        <h2>Change Password</h2>
+    <div className="min-h-screen flex items-center justify-center bg-[#e6f0fa]">
+      <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md">
 
-        <form onSubmit={handleSubmit}>
+        <h2 className="text-2xl font-bold text-center text-blue-700 mb-6">
+          Change Password
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+
           <input
             type="password"
             name="oldPassword"
@@ -47,7 +78,7 @@ function ChangePassword() {
             value={form.oldPassword}
             onChange={handleChange}
             required
-            style={inputStyle}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
@@ -57,7 +88,7 @@ function ChangePassword() {
             value={form.newPassword}
             onChange={handleChange}
             required
-            style={inputStyle}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
@@ -67,54 +98,27 @@ function ChangePassword() {
             value={form.confirmPassword}
             onChange={handleChange}
             required
-            style={inputStyle}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
-          <button type="submit" style={buttonStyle}>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition duration-300 font-semibold"
+          >
             Update Password
           </button>
         </form>
 
-        {message && <p style={{ marginTop: "15px" }}>{message}</p>}
+        {error && (
+          <p className="text-red-600 text-sm mt-4 text-center">{error}</p>
+        )}
+
+        {message && (
+          <p className="text-green-600 text-sm mt-4 text-center">{message}</p>
+        )}
       </div>
     </div>
   );
 }
-
-// Styles
-const containerStyle = {
-  height: "100vh",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  background: "#f4f6f9"
-};
-
-const cardStyle = {
-  background: "#fff",
-  padding: "40px",
-  borderRadius: "12px",
-  width: "350px",
-  boxShadow: "0 4px 20px rgba(0,0,0,0.1)"
-};
-
-const inputStyle = {
-  width: "100%",
-  padding: "10px",
-  marginTop: "15px",
-  borderRadius: "6px",
-  border: "1px solid #ccc"
-};
-
-const buttonStyle = {
-  width: "100%",
-  padding: "10px",
-  marginTop: "20px",
-  borderRadius: "6px",
-  border: "none",
-  background: "#3498db",
-  color: "#fff",
-  cursor: "pointer"
-};
 
 export default ChangePassword;

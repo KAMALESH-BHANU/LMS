@@ -199,14 +199,14 @@ function AdminDashboard() {
     }
   };
 
-  const approveUser = async (id) => {
-    try {
-      await API.put(`/api/admin/approve/${id}`);
-      fetchPendingUsers(); // refresh table
-    } catch (error) {
-      console.error("Approval failed", error);
-    }
-  };
+    const approveUser = async (id) => {
+      try {
+        await API.put(`/api/admin/approve/${id}`);
+        fetchPendingUsers(); // refresh table
+      } catch (error) {
+        console.error("Approval failed", error);
+      }
+    };
 
   const rejectUser = async (id) => {
     try {
