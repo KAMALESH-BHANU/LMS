@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/api/auth/change-password","/api/files/document/**")
                         .hasAnyRole("STUDENT","LIBRARIAN","ADMIN")
-                        .requestMatchers("/api/books/**","/api/issue/**")
+                        .requestMatchers("/api/books/**","/api/issue/**","/profile/**")
                         .hasAnyRole("ADMIN","LIBRARIAN","STUDENT")
                         .requestMatchers("/api/admin/**")
                         .hasRole("ADMIN")

@@ -12,12 +12,13 @@ import org.librarymanagementsystem.model.Academic;
 import org.librarymanagementsystem.model.Address;
 import org.librarymanagementsystem.model.User;
 import org.librarymanagementsystem.model.Work;
-import org.librarymanagementsystem.repository.UserRepository;
+import org.librarymanagementsystem.repository.*;
 import org.librarymanagementsystem.util.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.librarymanagementsystem.security.JwtUtil;
@@ -41,6 +42,10 @@ public class UserService {
     private final JwtUtil jwtUtil;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private BorrowRepository borrowRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
 
     public UserService(UserRepository userRepository,
@@ -223,5 +228,29 @@ public class UserService {
         userRepository.save(user);
 
         return "Password updated successfully";
+    }
+    public StudentStatsResponse getStats(Authentication auth) {
+
+        // ✅ Get logged-in user
+        User user = userRepository.findByEmail(auth.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // ✅ Get member linked to user
+        Member member = memberRepository.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+
+        int issuedBooks = borrowRepository.countByMemberAndStatus(member, "ISSUED");
+
+        // ✅ TOTAL BORROWED
+        int totalBorrowed = borrowRepository.countByMember(member);
+
+        // ✅ Borrow limit (can be static or from DB)
+        int borrowLimit = 5; // 🔥 you can move this to DB later
+
+        return StudentStatsResponse.builder()
+                .borrowedBooks(issuedBooks)
+                .borrowLimit(borrowLimit)
+                .totalBorrowed(totalBorrowed)
+                .build();
     }
 }

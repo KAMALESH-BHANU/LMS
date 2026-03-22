@@ -27,7 +27,7 @@ const ReturnRequests = () => {
 
       setLoading(true);
 
-      const res = await API.get("/api/admin/return-requests");
+      const res = await API.get("/api/return-requests");
 
       setRequests(res.data || []);
       setFiltered(res.data || []);
@@ -48,7 +48,7 @@ const ReturnRequests = () => {
 
     try {
 
-      await API.post(`/api/admin/approve-return?issueId=${issueId}`);
+      await API.post(`/api/approve-return?issueId=${issueId}`);
 
       alert("Return approved");
 

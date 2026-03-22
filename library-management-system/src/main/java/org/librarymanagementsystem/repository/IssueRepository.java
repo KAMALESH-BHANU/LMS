@@ -43,4 +43,5 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
         WHERE i.returnRequested = true
     """)
     List<ReturnRequestDTO> findReturnRequests();
+
 }

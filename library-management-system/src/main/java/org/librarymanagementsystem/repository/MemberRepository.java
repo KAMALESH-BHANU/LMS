@@ -1,6 +1,7 @@
 package org.librarymanagementsystem.repository;
 
 import org.librarymanagementsystem.model.Member;
+import org.librarymanagementsystem.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -38,4 +39,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
            OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :keyword, '%'))
            """)
     List<org.librarymanagementsystem.dto.MemberSearchDTO> searchMembers(String keyword);
+    Optional<Member> findByUser(User user);
 }

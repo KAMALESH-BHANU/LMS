@@ -3,6 +3,7 @@ package org.librarymanagementsystem.security;
 import io.jsonwebtoken.*;
 
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,8 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-
+    @Value("${app.secret}")
+    private String secret;
     private final String SECRET = "bXlTdXBlclNlY3JldEtleU15U3VwZXJTZWNyZXRLZXk=";
 
 

@@ -35,4 +35,6 @@ public class Issue {
 
     @Column(nullable = false)
     private Boolean returnRequested = false;
+    private boolean returned;
+    private Double paidFine;
 }

@@ -495,7 +495,6 @@ public class IssueService {
             dto.setIssueDate(issue.getIssueDate());
             dto.setDueDate(issue.getDueDate());
             dto.setReturnDate(issue.getReturnDate());
-            dto.setPenalty(issue.getPenalty());
             dto.setStatus(issue.getStatus());
             dto.setCoverImage(issue.getBook().getCoverImage());
 
@@ -504,6 +503,22 @@ public class IssueService {
                             LocalDate.now().isAfter(issue.getDueDate());
 
             dto.setOverdue(overdue);
+
+            // ---------- PENALTY CALCULATION ----------
+
+            double penalty = issue.getPenalty() != null ? issue.getPenalty() : 0;
+
+            if (overdue) {
+
+                long daysLate = ChronoUnit.DAYS.between(
+                        issue.getDueDate(),
+                        LocalDate.now()
+                );
+
+                penalty = daysLate * 10.0;
+            }
+
+            dto.setPenalty(penalty);
 
             return dto;
 

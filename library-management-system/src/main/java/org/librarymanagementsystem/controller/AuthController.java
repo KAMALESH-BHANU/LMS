@@ -64,6 +64,10 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/student/stats")
+    public ResponseEntity<?> getStudentStats(Authentication auth) {
+        return ResponseEntity.ok(userService.getStats(auth));
+    }
 
 
 

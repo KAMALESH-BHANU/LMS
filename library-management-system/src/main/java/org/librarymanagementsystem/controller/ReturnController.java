@@ -26,7 +26,7 @@ public class ReturnController {
 
     // ADMIN VIEW REQUESTS
 
-    @GetMapping("/admin/return-requests")
+    @GetMapping("/return-requests")
     public List<ReturnRequestDTO> getReturnRequests() {
 
         return returnService.getReturnRequests();
@@ -35,7 +35,7 @@ public class ReturnController {
 
     // ADMIN APPROVE RETURN
 
-    @PostMapping("/admin/approve-return")
+    @PostMapping("/approve-return")
     public String approveReturn(@RequestParam Long issueId) {
 
         returnService.approveReturn(issueId);

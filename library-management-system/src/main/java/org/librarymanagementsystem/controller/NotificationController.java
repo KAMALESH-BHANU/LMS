@@ -10,19 +10,32 @@ import java.util.List;
 @RestController
 @RequestMapping("/notifications")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping("/{userId}")
-    public List<Notification> getNotifications(@PathVariable Long userId) {
-
-        return notificationService.getUserNotifications(userId);
+    /*
+     GET ALL NOTIFICATIONS
+    */
+    @GetMapping("/member/{memberId}")
+    public List<Notification> getNotifications(@PathVariable Long memberId) {
+        return notificationService.getUserNotifications(memberId);
     }
 
+    /*
+     GET UNREAD NOTIFICATIONS
+    */
+    @GetMapping("/unread/{memberId}")
+    public List<Notification> getUnreadNotifications(@PathVariable Long memberId) {
+        return notificationService.getUnreadNotifications(memberId);
+    }
+
+    /*
+     MARK AS SEEN
+    */
     @PutMapping("/seen/{id}")
     public void markAsSeen(@PathVariable Long id) {
-
         notificationService.markAsSeen(id);
     }
 

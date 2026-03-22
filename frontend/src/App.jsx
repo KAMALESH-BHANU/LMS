@@ -104,6 +104,7 @@ import MembershipPlan from "./pages/librarian/MembershipPlan";
 import LibProfile from "./pages/librarian/Profile";
 import LibrarianLayout from "./components/LibrarianLayout";
 import BookHistory from "./pages/student/BookHistory";
+import Paymentsucess from "./pages/student/payment-success"
 //import Reports from "./pages/admin/Reports";
 
 const App = () => {
@@ -152,6 +153,8 @@ const App = () => {
               <Route path="book-history" element={<BookHistory />} />
               <Route path="membership" element={<StudentMembership />} />
               <Route path="profile" element={<StudentProfile />} />
+              <Route path="payment-success" element={<Paymentsucess />} />
+             
             </Route>
 
             {/* LIBRARIAN */}

@@ -61,6 +61,8 @@ public class User {
     // Store uploaded document path or filename
     private String documentPath;
 
+    private boolean twoFAEnabled;
+
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Address address;
